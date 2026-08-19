@@ -29,7 +29,8 @@ def list_repo_files(repo_url):
 
     url = f"https://api.github.com/repos/{owner}/{repo}/git/trees/main?recursive=1"
 
-    response = requests.get(url)
+    response = requests.get(url, timeout=10)
+    response.raise_for_status()
     response.raise_for_status()
 
     data = response.json()
@@ -56,4 +57,4 @@ def read_repo_file(repo_url, file_path):
 
     data = response.json()
 
-    return requests.get(data["download_url"]).text
+    return requests.get(data["download_url"], timeout=10).text
