@@ -1,5 +1,8 @@
 from pathlib import Path
 
+import requests
+
+
 def list_files(directory):
     proj_dir = Path(directory)
     files = []
@@ -17,3 +20,40 @@ def read_file(path):
 def write_file(path, generated_code):
     with open(path, "w") as f:
         f.write(generated_code)
+
+def list_repo_files(repo_url):
+    parts = repo_url.rstrip("/").split("/")
+
+    owner = parts[-2]
+    repo = parts[-1]
+
+    url = f"https://api.github.com/repos/{owner}/{repo}/git/trees/main?recursive=1"
+
+    response = requests.get(url)
+    response.raise_for_status()
+
+    data = response.json()
+
+    files = []
+
+    for item in data["tree"]:
+        if item["type"] == "blob":
+            files.append(item["path"])
+
+    return files
+
+
+def read_repo_file(repo_url, file_path):
+    parts = repo_url.rstrip("/").split("/")
+
+    owner = parts[-2]
+    repo = parts[-1]
+
+    url = f"https://api.github.com/repos/{owner}/{repo}/contents/{file_path}"
+
+    response = requests.get(url)
+    response.raise_for_status()
+
+    data = response.json()
+
+    return requests.get(data["download_url"]).text
