@@ -9,8 +9,9 @@ load_dotenv()
 
 repo = os.getenv('REPO_PATH')
 
-def run_agent(task):
-    files = list_repo_files(repo)
+def run_agent(repo_url, task):
+
+    files = list_repo_files(repo_url)
 
     prompt = f"""
         You are a software engineering agent.
@@ -28,6 +29,10 @@ def run_agent(task):
     print(response)
 
 if __name__ == "__main__":
+    repo_url = input("Enter GitHub repository URL: ")
+    #pass this to the agent
+    task = input("What do you want the agent to do? ")
+
     run_agent(
-        "Implement idempotency for POST /payments"
+        repo_url,"Implement idempotency for POST /payments"
     )
