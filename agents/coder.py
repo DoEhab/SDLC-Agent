@@ -6,7 +6,7 @@ from llm import ask_llm
 from tools.filesystem import write_file, clone_repo
 
 
-def generate_code(repo_url, task, analysis):
+def generate_code(repo_url, task, source_code, analysis, local_repo_path):
 
     # 2. Ask LLM to generate the modified files
     print("1. Passing code analysis to LLM...")
@@ -23,6 +23,8 @@ The task:
 Based on this code analysis:
 {analysis}
 
+Actual source code from the repository:
+{source_code}
 Generate the required code changes.
 Before returning the changes, verify mentally that:
 - all referenced classes and fields exist
@@ -64,7 +66,7 @@ Example:
     # 4. Write each file inside the cloned repository
     for file_path, content in changes.items():
 
-        full_path = Path(local_repo_path) / file_path
+        full_path = Path(local_repo_path)
 
         print(f"Writing: {full_path}")
 

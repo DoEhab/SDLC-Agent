@@ -6,14 +6,13 @@ from tools.filesystem import clone_repo, list_files, read_file
 
 
 def run_agent(repo_url, task):
-
     local_repo_path = clone_repo(repo_url)
     print(f"Cloned repository to: {local_repo_path}")
-    file_list = list_files(local_repo_path)
-    for file in file_list:
-        content = read_file(file)
 
-    analysis = analyzer_agent(repo_url,task)
-    changes = generate_code(repo_url, task, analysis)
+    result = analyzer_agent(repo_url, task)
+
+    analysis = result["analysis"]
+    source_code = result["source_code"]
+    changes = generate_code(repo_url, task, source_code, analysis, local_repo_path)
 
     return changes

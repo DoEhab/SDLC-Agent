@@ -136,6 +136,9 @@ def analyzer_agent(repo_url, task):
     analysis = ask_llm(analysis_prompt)
 
     print("8. Analysis:")
-    return analysis
+    return {
+        "analysis": analysis,
+        "source_code": source_code
+    }
 
 
