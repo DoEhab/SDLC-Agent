@@ -144,10 +144,10 @@ def run_agent(repo_url, task):
     print(analysis)
 
 if __name__ == "__main__":
-    repo_url = input("Enter GitHub repository URL: ")
+    repo_url = input("Enter GitHub repository URL: ") or "https://github.com/doehab/pay_service"
     #pass this to the agent
-    task = input("What do you want the agent to do? ")
+    task = input("What do you want the agent to do? ") or "Implement idempotency for POST /payments"
 
     run_agent(
-        repo_url,"Implement idempotency for POST /payments"
+        repo_url, task
     )
