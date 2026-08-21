@@ -60,12 +60,14 @@ def read_repo_file(repo_url, file_path):
 
     return requests.get(data["download_url"], timeout=10).text
 
-def clone_repo(repo_url):
-    destination = "./repos/SDLC-Agent"
+def clone_repo(repo_url, destination="./repos"):
+    repo_name = repo_url.rstrip("/").split("/")[-1]
+
+    repo_path = Path(destination) / repo_name
 
     subprocess.run(
-        ["git", "clone", repo_url, destination],
+        ["git", "clone", repo_url, str(repo_path)],
         check=True
     )
-
     print("Repository cloned successfully!")
+    return str(repo_path)
