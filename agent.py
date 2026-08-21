@@ -81,29 +81,61 @@ def run_agent(repo_url, task):
     print("\n7. Files successfully read:")
 
     analysis_prompt = f"""
-    You are a software engineering agent.
+    You are a software engineering analysis agent.
 
-    User task:
+    USER TASK:
     {task}
 
     You previously identified the relevant files.
 
-    Below is the actual source code from those files:
+    Below is the ACTUAL SOURCE CODE retrieved from the repository.
+    Each file is explicitly delimited by its repository path.
 
     {source_code}
 
-    Analyze the actual source code and explain:
+    Your job is to analyze the requested task against the actual source code.
 
-    1. How the current implementation works.
-    2. What needs to change to implement the requested task.
-    3. Which files need to be modified.
-    4. What changes should be made in each file.
-    5. What tests should be added or modified.
+    IMPORTANT RULES:
+    - Base your analysis ONLY on the source code provided above.
+    - Do NOT invent files, classes, methods, APIs, dependencies, or existing behavior that are not present in the provided code.
+    - If information required to implement the task is missing from the provided source code, explicitly state that it is unknown.
+    - Distinguish between what currently exists and what needs to be added or changed.
+    - The file paths in your response must match the paths provided above.
 
-    Do not invent code or files that are not present.
-    Base your analysis on the actual source code provided.
+    Analyze the following:
+
+    1. Explain how the current implementation works and how the relevant components interact.
+    2. Explain what needs to change to implement the user's task.
+    3. Identify which existing files need to be modified.
+    4. Identify any new files that need to be created.
+    5. For each affected file, describe the specific changes required.
+    6. Identify tests that should be added or modified.
+    7. Mention any important dependencies, interfaces, or existing code that must be preserved.
+
+    After the analysis, provide a JSON array containing the required code changes.
+
+    The JSON array is the authoritative list of required changes.
+
+    Each item MUST use this format:
+
+    {{
+    "file": "repository/path/to/file",
+        "action": "modify",
+        "description": "Specific description of the required change"
+    }}
+
+   
+    If no code changes are required, return:
+
+    []
+
+    CRITICAL OUTPUT REQUIREMENTS:
+    - The JSON array MUST be the final part of your response.
+    - Do NOT put anything after the JSON array.
+    - Do NOT wrap the JSON array in Markdown code fences.
+    - The JSON MUST be valid JSON.
+    - Do NOT include comments inside the JSON.
     """
-
     print("7. Sending source code to Cohere...")
 
     analysis = ask_llm(analysis_prompt)
