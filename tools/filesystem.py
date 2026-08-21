@@ -1,3 +1,4 @@
+import subprocess
 from pathlib import Path
 
 import requests
@@ -58,3 +59,13 @@ def read_repo_file(repo_url, file_path):
     data = response.json()
 
     return requests.get(data["download_url"], timeout=10).text
+
+def clone_repo(repo_url):
+    destination = "./repos/SDLC-Agent"
+
+    subprocess.run(
+        ["git", "clone", repo_url, destination],
+        check=True
+    )
+
+    print("Repository cloned successfully!")
