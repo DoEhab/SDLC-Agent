@@ -8,11 +8,6 @@ from tools.filesystem import write_file, clone_repo
 
 def generate_code(repo_url, task, analysis):
 
-    # 1. Clone GitHub repository locally
-    local_repo_path = clone_repo(repo_url)
-
-    print(f"Cloned repository to: {local_repo_path}")
-
     # 2. Ask LLM to generate the modified files
     print("1. Passing code analysis to LLM...")
 
