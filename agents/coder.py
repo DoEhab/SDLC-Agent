@@ -58,6 +58,8 @@ Example:
         response = response.split("\n", 1)[1]
         response = response.rsplit("```", 1)[0]
 
+    print(f"LLM response:: {response}")
+
     # 3. Convert LLM JSON response to Python dictionary
     changes = json.loads(response)
 
@@ -66,10 +68,11 @@ Example:
     # 4. Write each file inside the cloned repository
     for file_path, content in changes.items():
 
-        full_path = Path(local_repo_path)
+        full_path = Path(local_repo_path) / file_path
 
         print(f"Writing: {full_path}")
 
         write_file(full_path, content)
 
     print("4. Code changes written successfully.")
+    return changes

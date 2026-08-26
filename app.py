@@ -34,7 +34,10 @@ if st.button("🔍 Analyze & Suggest Changes", type="primary"):
                 st.success("Analysis completed!")
 
                 st.subheader("Suggested Changes")
-                st.markdown(result)
+
+                for file_path, content in result.items():
+                    with st.expander(f"📄 {file_path}", expanded=False):
+                        st.code(content, language="java")
 
             except Exception as e:
                 st.error(f"Error: {e}")

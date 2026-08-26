@@ -1,3 +1,4 @@
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -62,12 +63,19 @@ def read_repo_file(repo_url, file_path):
 
 def clone_repo(repo_url, destination="./repos"):
     repo_name = repo_url.rstrip("/").split("/")[-1]
-
     repo_path = Path(destination) / repo_name
 
+    # Delete existing repository if it already exists
+    if repo_path.exists():
+        print(f"Repository already exists. Deleting: {repo_path}")
+        shutil.rmtree(repo_path)
+
+    # Clone fresh copy
     subprocess.run(
         ["git", "clone", repo_url, str(repo_path)],
         check=True
     )
+
     print("Repository cloned successfully!")
+
     return str(repo_path)
